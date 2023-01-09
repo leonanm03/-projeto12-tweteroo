@@ -44,6 +44,13 @@ app.get("/tweets", (req, res) => {
   res.status(200).send(tweetsObj);
 });
 
+app.post("/tweets", (req, res) => {
+  const { username, tweet } = req.body;
+
+  tweets.push({ username, tweet });
+  res.status(201).send("OK");
+});
+
 app.listen(PORT, () => {
   console.log(`App server runing in http://localhost:${PORT}`);
   console.log(users);
