@@ -36,6 +36,13 @@ app.post("/sign-up", (req, res) => {
   }
 });
 
+app.get("/tweets", (req, res) => {
+  const tweetsObj = tweets.map((tweet) => {
+    const owner = users.find((u) => u.username === tweet.username);
+    return { ...tweet, avatar: owner.avatar };
+  });
+  res.status(200).send(tweetsObj);
+});
 
 app.listen(PORT, () => {
   console.log(`App server runing in http://localhost:${PORT}`);
