@@ -6,20 +6,9 @@ const app = express();
 app.use(cors());
 app.use(json());
 
-const users = [
-  {
-    username: "teste",
-    avatar:
-      "https://image.disparada.com.br/wp-content/uploads/2021/03/11113736/img-bolsominion.jpg",
-  },
-];
+const users = [];
 
-const tweets = [
-  {
-    username: "teste",
-    tweet: "batata!!",
-  },
-];
+const tweets = [];
 
 app.post("/sign-up", (req, res) => {
   const signUp = req.body;
@@ -50,13 +39,18 @@ app.get("/tweets", (req, res) => {
 app.post("/tweets", (req, res) => {
   const { username, tweet } = req.body;
 
-  tweets.push({ username, tweet });
+  const user = users.find((user) => user.username === username);
+  if (!user) {
+    res.status(401).send("UNAUTHORIZED");
+  } else {
+    tweets.push({ username, tweet });
 
-  if (tweets.length > 10) {
-    tweets.shift();
+    if (tweets.length > 10) {
+      tweets.shift();
+    }
+
+    res.status(201).send("OK");
   }
-
-  res.status(201).send("OK");
 });
 
 app.listen(PORT, () => {
