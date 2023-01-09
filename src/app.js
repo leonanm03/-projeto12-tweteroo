@@ -37,10 +37,13 @@ app.post("/sign-up", (req, res) => {
 });
 
 app.get("/tweets", (req, res) => {
-  const tweetsObj = tweets.map((tweet) => {
+  let tweetsObj = tweets.map((tweet) => {
     const owner = users.find((u) => u.username === tweet.username);
     return { ...tweet, avatar: owner.avatar };
   });
+
+  tweetsObj = tweetsObj.reverse();
+
   res.status(200).send(tweetsObj);
 });
 
@@ -48,6 +51,11 @@ app.post("/tweets", (req, res) => {
   const { username, tweet } = req.body;
 
   tweets.push({ username, tweet });
+
+  if (tweets.length > 10) {
+    tweets.shift();
+  }
+
   res.status(201).send("OK");
 });
 
